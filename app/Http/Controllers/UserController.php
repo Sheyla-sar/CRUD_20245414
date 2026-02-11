@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\PatchUserRequest;
+
 
 class UserController extends Controller
 {
@@ -24,6 +26,9 @@ class UserController extends Controller
         ->when(
             $request->has('email'),
             fn ($query)=> $query->where('email', 'like', '%'. $request->input('email').'%')
+        )->when(
+            $request->boolean('is_trashed'), 
+            fn ($query) => $query->onlyTrashed()
         )
 
         ->get();
@@ -58,7 +63,7 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    public function partialUpdate (UpdateUserRequest $request, User $user)
+    public function partialUpdate (PatchUserRequest $request, User $user)
     {
         $data = $request->validated();
         

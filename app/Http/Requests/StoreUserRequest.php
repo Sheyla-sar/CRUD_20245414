@@ -30,7 +30,6 @@ class StoreUserRequest extends FormRequest
             'phone_number' => ['nullable', 'string', 'max:20'],
             'birth_date' => ['required', 'date', 'before:today'],
             'hiring_date' => ['sometimes', 'nullable', 'date'],
-            'password' => ['required', 'min:8'],
         ];
     }
 }
